@@ -1,7 +1,7 @@
 
-<div class="jumbotron text-center" style="margin-bottom:0">
+<footer>
   <p>&copy; Unai Baeza</p>
-</div>
+</footer>
 
 </body>
 </html>

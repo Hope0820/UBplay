@@ -51,6 +51,11 @@ CREATE TABLE `users` (
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `joined` datetime NOT NULL,
   `groups` int(11) NOT NULL,
+  `p_dia` int(10),
+  `p_setmana` int(10),
+  `p_mes` int(10),
+  `p_any` int(10),
+  `p_total` int(10),
 
   PRIMARY KEY (`uid`)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -58,10 +63,9 @@ CREATE TABLE `users` (
 ALTER TABLE `users`
     MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000;
 
-INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('$2y$10$sX/k19vToScBCQy1LUvw2e2.5iCOsbL3zb7CVni/M52Q2leXgONvO', 'ubaeza', 'Unai', '2022-04-19 17:02:07', 1);
-INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('$2y$10$sX/k19vToScBCQy1LUvw2e2.5iCOsbL3zb7CVni/M52Q2leXgONvO', 'Baeza', 'Unai', '2022-04-23 22:33:22', 1);
-INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('$2y$10$sX/k19vToScBCQy1LUvw2e2.5iCOsbL3zb7CVni/M52Q2leXgONvO', 'Baeza', 'Unai', '2022-04-24 09:42:27', 1);
-INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('$2y$10$sX/k19vToScBCQy1LUvw2e2.5iCOsbL3zb7CVni/M52Q2leXgONvO', 'Baeza', 'Unai', '2022-04-25 20:06:51', 1);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`, `p_dia`, `p_setmana`, `p_mes`, `p_any`, `p_total`) VALUES ('ubaeza', '$2y$10$sX/k19vToScBCQy1LUvw2e2.5iCOsbL3zb7CVni/M52Q2leXgONvO', 'Unai', '2022-04-19 17:02:07', 1, 1500, 2200, 2200, 2500, 2500);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`, `p_dia`, `p_setmana`, `p_mes`, `p_any`, `p_total`) VALUES ('maria99', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Maria', '2022-04-23 22:33:22', 1, 600, 600, 1350, 3550, 3550);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('ttomas', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Tomàs', '2022-04-24 09:42:27', 1);
 
 -- Sessions usuaris
 CREATE TABLE `users_session` (
@@ -92,20 +96,20 @@ ALTER TABLE `jocs`
 INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('A', 'a.png', 'Primer joc', '2022-04-19 17:02:07');
 INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('B', 'b.png', 'Segon joc', '2022-04-27 12:05:30');
 INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('C', 'c.png', 'Tercer joc', '2022-05-03 10:09:18');
-INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('Proximament', 'proximament.jpg', '2022-05-03 20:37:02');
-INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('Proximament', 'proximament.jpg', '2022-05-20 22:13:14');
+INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('Proximament', 'proximament.png', 'Proximament', '2022-05-03 20:37:02');
+INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('Proximament', 'proximament.png', 'Proximament','2022-05-20 22:13:14');
 
 -- Resultats
 CREATE TABLE `resultats` (
                         `rid` int(11) NOT NULL,
                         `uid` int(11) NOT NULL,
+                        `nom` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
                         `jid` int(11) NOT NULL,
-                        `puntuacio` int(6) NOT NULL,
+                        `puntuacio` int(10) NOT NULL,
                         data TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
                         PRIMARY KEY (`rid`),
-                        FOREIGN KEY (`uid`) REFERENCES `users`(`uid`) ON DELETE CASCADE,
-                        FOREIGN KEY (`jid`) REFERENCES `jocs`(`jid`) ON DELETE CASCADE
+                        FOREIGN KEY (`uid`) REFERENCES `users`(`uid`) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ALTER TABLE `resultats`
