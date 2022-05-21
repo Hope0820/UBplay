@@ -1,6 +1,6 @@
 
 <div class="jumbotron text-center" style="margin-bottom:0">
-  <p>Footer</p>
+  <p>&copy; Unai Baeza</p>
 </div>
 
 </body>

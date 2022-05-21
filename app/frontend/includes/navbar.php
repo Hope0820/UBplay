@@ -17,10 +17,9 @@
       </li>
     </ul>
     <?php if ($user->isLoggedIn()): ?>
-      <p>>Hello,  <?php echo $user->data()->name;?></p>
     <ul class="nav navbar-nav nav-item navbar-right">
-      <li><a href="profile.php"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
-      <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      <li><a href="profile.php"><span class="glyphicon glyphicon-user"></span> <?php echo $user->data()->name;?></a></li>
+      <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Sortir</a></li>
     </ul>
     <?php else: ?>
     <ul class="nav navbar-nav nav-item navbar-right">

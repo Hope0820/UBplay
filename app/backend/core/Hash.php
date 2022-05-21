@@ -9,7 +9,7 @@ class Hash
 
     public static function salt()
     {
-        return mcrypt_create_iv(Config::get('hash/salt'));
+        return random_bytes(Config::get('hash/salt'));
     }
 
     public static function unique()

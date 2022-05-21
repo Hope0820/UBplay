@@ -86,6 +86,14 @@ class Database
                 }
             }
         }
+        else if ($where[0] == "") {
+          $sql = "{$action} FROM {$table}";
+
+          if (!$this->query($sql, array())->error())
+          {
+            return $this;
+          }
+        }
 
         return false;
     }

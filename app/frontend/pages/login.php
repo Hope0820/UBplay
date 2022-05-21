@@ -1,13 +1,13 @@
 
 <div class="container" style="padding-top: 1%; padding-bottom: 5%;">
-<h2>Login Form</h2>
+<h2>Iniciar sessió</h2>
   <form action="" method="post">
     <div class="form-group">
-      <label for="username">Username:</label>
+      <label for="username">Usuari:</label>
       <input type="text" class="form-control" id="username" placeholder="Enter Username" name="username">
     </div>
     <div class="form-group">
-      <label for="pwd">Password:</label>
+      <label for="pwd">Contrasenya:</label>
       <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
     </div>
     <div class="form-group form-check">

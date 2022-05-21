@@ -44,8 +44,8 @@ if(Input::exists())
                     'groups'    => 1
                     ));
 
-                Session::flash('register-success', 'Thanks for registering! You can login now.');
-                Redirect::to('index.php');
+                Session::flash('register-success', 'Gracies per registrar-te, ja pots iniciar sessió');
+                Redirect::to('login.php');
             }
             catch(Exception $e)
             {

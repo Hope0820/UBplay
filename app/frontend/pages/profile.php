@@ -12,22 +12,22 @@
                   <table class="table table-user-information">
                     <tbody>
                       <tr>
-                        <td>Name :</td>
+                        <td>Nom:</td>
                         <td><?php echo escape($data->name); ?></td>
                       </tr>
                       <tr>
-                        <td>Username :</td>
+                        <td>Usuari:</td>
                         <td><?php echo escape($data->username); ?></td>
                       </tr>
                       <tr>
-                        <td>Date Joined :</td>
+                        <td>Data de creació:</td>
                         <td><?php echo escape($data->joined); ?></td>
                       </tr>
                     </tbody>
                   </table>
-                  <a href="update-account.php" class="btn btn-primary">Update Information</a>
-                  <a href="index.php" class="btn btn-primary">Back</a>
-                  <a href="delete-account.php" class="btn btn-danger">Delete Account</a>
+                  <a href="update-account.php" class="btn btn-primary">Editar</a>
+                  <a href="index.php" class="btn btn-primary">Enrere</a>
+                  <a href="delete-account.php" class="btn btn-danger">Borrar Compte</a>
                 </div>
               </div>
             </div>

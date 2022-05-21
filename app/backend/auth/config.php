@@ -3,14 +3,14 @@
 $GLOBALS['config'] = array(
 
     'app' => array(
-        'name'          => 'AppName',
+        'name'          => 'UBplay',
     ),
 
     'mysql' => array(
         'host'          => '127.0.0.1',
-        'username'      => 'root',
-        'password'      => '',
-        'db_name'        => 'php_boilerplate'
+        'username'      => 'ubpAdmin',
+        'password'      => 'JhaVEc34mMa4vzaa',
+        'db_name'        => 'ubplay'
     ),
 
     'password' => array(

@@ -15,8 +15,8 @@
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
   <!-- Custom Assets -->
-  <link href="<?php echo FRONTEND_ASSET . 'css/profile.css'; ?>">
-  <script src="<?php echo FRONTEND_ASSET . 'css/profile.js'; ?>"></script>
+  <link href="<?php echo FRONTEND_ASSET . 'css/main.css'; ?>" rel="stylesheet">
+  <script src="<?php echo FRONTEND_ASSET . 'js/main.js'; ?>"></script>
 
   <style>
   .fakeimg {
@@ -26,12 +26,4 @@
   </style>
 </head>
 <body>
-
-<div class="jumbotron text-center" style="margin-bottom:0">
-  <h1>My First <?php appName(); ?></h1>
-  <p>Resize this responsive page to see the effect!</p>
-  <?php if ($user->isLoggedIn()): ?>
-    <h3 align="right">Hello,  <?php echo $user->data()->name;?></h3>
-   <?php endif; ?>
-</div>
 

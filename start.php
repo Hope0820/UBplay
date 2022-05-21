@@ -7,3 +7,5 @@ define('FRONTEND_PAGE', 'app/frontend/pages/');
 define('FRONTEND_INCLUDE', 'app/frontend/includes/');
 define('FRONTEND_INCLUDE_ERROR', 'app/frontend/includes/errors/');
 define('FRONTEND_ASSET', 'app/frontend/assets/');
+define('FRONTEND_ASSET_IMG', 'app/frontend/assets/img/');
+define('FRONTEND_JOCS', 'app/frontend/jocs/');
