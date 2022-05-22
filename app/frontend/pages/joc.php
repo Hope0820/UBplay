@@ -1,18 +1,16 @@
-<?php $database = Database::getInstance(); ?>
+<?php
+/** @var string $joc */
+/** @var string $ruta */
+
+  $database = Database::getInstance();
+  $database->get('jocs',array('ruta','=',$ruta));
+  $joc_bd = $database->results()[0];
+?>
 <h1 class="titol-pagina">UBplay, la teva plataforma web de jocs</h1>
 <div class="row">
   <div class="col-md-9">
-    <div class="jocs">
-    <?php
-      $database->get('jocs', array(''));
-      foreach($database->results() as $joc) {
-        echo "<a href='".FRONTEND_JOCS.$joc->ruta."'><div class='joc'>
-                <div class='img-wrapper'><img src='".FRONTEND_ASSET_IMG.$joc->img."' alt='$joc->nom'></div>
-                <span class='joc-descripcio'>$joc->descripcio</span>
-                <span class='joc-nom'>$joc->nom</span>
-              </div></a>";
-      }
-    ?>
+    <div class="canvas-wrapper">
+      <canvas id="joc-<?php echo $joc_bd->jid ?>" class="joc-canvas" width="800" height="600"></canvas>
     </div>
   </div>
   <div class="col-md-3">
@@ -29,3 +27,4 @@
     </div>
   </div>
 </div>
+<script type="module" src="<?php echo FRONTEND_ASSET.'js/jocs/'.$joc.'/joc.js' ?>"></script>

@@ -51,11 +51,11 @@ CREATE TABLE `users` (
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `joined` datetime NOT NULL,
   `groups` int(11) NOT NULL,
-  `p_dia` int(10),
-  `p_setmana` int(10),
-  `p_mes` int(10),
-  `p_any` int(10),
-  `p_total` int(10),
+  `p_dia` int(10) DEFAULT 0,
+  `p_setmana` int(10) DEFAULT 0,
+  `p_mes` int(10) DEFAULT 0,
+  `p_any` int(10) DEFAULT 0,
+  `p_total` int(10) DEFAULT 0,
 
   PRIMARY KEY (`uid`)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -82,9 +82,11 @@ ALTER TABLE `users_session`
 -- Jocs
 CREATE TABLE `jocs` (
   `jid` int(11) NOT NULL,
-  `nom` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nom` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ruta` varchar(100) COLLATE utf8mb4_unicode_ci,
   `descripcio` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `img` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cops_jugat` int(11) NOT NULL,
   `data_afegit` datetime NOT NULL,
 
   PRIMARY KEY (`jid`)
@@ -93,9 +95,9 @@ CREATE TABLE `jocs` (
 ALTER TABLE `jocs`
     MODIFY `jid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
-INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('A', 'a.png', 'Primer joc', '2022-04-19 17:02:07');
-INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('B', 'b.png', 'Segon joc', '2022-04-27 12:05:30');
-INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('C', 'c.png', 'Tercer joc', '2022-05-03 10:09:18');
+INSERT INTO jocs (`nom`, `ruta`, `img`, `descripcio`, `data_afegit`) VALUES ('Space Invaders', 'marcianitos.php', 'marcianitos.jpg', 'Elimina a totes les naus alienígenes!', '2022-04-19 17:02:07');
+INSERT INTO jocs (`nom`, `ruta`, `img`, `descripcio`, `data_afegit`) VALUES ('B', 'snake.php', 'b.png', 'Segon joc', '2022-04-27 12:05:30');
+INSERT INTO jocs (`nom`, `ruta`, `img`, `descripcio`, `data_afegit`) VALUES ('C', 'c.php', 'c.png', 'Tercer joc', '2022-05-03 10:09:18');
 INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('Proximament', 'proximament.png', 'Proximament', '2022-05-03 20:37:02');
 INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('Proximament', 'proximament.png', 'Proximament','2022-05-20 22:13:14');
 
@@ -122,5 +124,33 @@ INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (3,1001,600);
 INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (3,1001,750);
 INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (3,1001,2200);
 
+-- Events puntuacions
+CREATE OR REPLACE EVENT `reset_puntuacio_dia`
+ON SCHEDULE
+	EVERY 1 DAY
+    STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 1 DAY)
+DO
+UPDATE users SET p_dia = 0;
+
+CREATE OR REPLACE EVENT `reset_puntuacio_setmana`
+ON SCHEDULE
+	EVERY 1 WEEK
+    STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 1 WEEK)
+DO
+UPDATE users SET p_setmana = 0;
+
+CREATE OR REPLACE EVENT `reset_puntuacio_mes`
+ON SCHEDULE
+	EVERY 1 MONTH
+    STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 1 MONTH)
+DO
+UPDATE users SET p_mes = 0;
+
+CREATE OR REPLACE EVENT `reset_puntuacio_any`
+ON SCHEDULE
+	EVERY 1 YEAR
+    STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 1 YEAR)
+DO
+UPDATE users SET p_any = 0;
 
 COMMIT;

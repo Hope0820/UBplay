@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  const RUTA_PUNTUACIONS = 'app/backend/puntuacions/';
+  const RUTA_PUNTUACIONS = '/app/backend/puntuacions/';
   let xhttp;
   $('.seleccionar-dia > li').on('click',function() {
     let periode = $(this).attr('data-periode');
