@@ -162,7 +162,7 @@ footer {
     justify-content: center;
 }
 .joc-canvas {
-    padding: 25px;
+    padding: 0 25px;
     background: #333;
     box-shadow: 0 0 8px aliceblue;
     border-radius: 8px;

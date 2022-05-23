@@ -1,18 +1,33 @@
 import Alien from './alien.js';
 //import Jugador from './jugador.js';
 
+const TASA_REFRESC = 20;
 const MIDA_ALIENS = 40;
 const MIDA_JUGADOR = 60;
+const MIDA_TRET = 15;
 const MARGE_VERTICAL_GRUP = 50;
 const SEPARACIO_COLUMNA = 20 + MIDA_ALIENS;
 const SEPARACIO_FILA = 20 + MIDA_ALIENS;
-const MOVIMENT = 2;
+const MOVIMENT_JUGADOR = 2;
+const MOVIMENT_BLOC = 10;
+const DESCENS_BLOC = 10;
+const FREQUENCIA_MOVIMENT_BLOC_INICIAL = TASA_REFRESC;
+const VELOCITAT_TRET = 10;
 const ALTURA_JUGADOR = 100;
-const RUTA_IMATGES = '/app/frontend/assets/img/jocs/marcianitos/';
 
-/*
-* PUNTS: 10, 20 , 25, 30
-* */
+
+
+
+const RUTA_ASSETS = '/app/frontend/assets/';
+const RUTA_IMATGES = RUTA_ASSETS + 'img/jocs/marcianitos/';
+const RUTA_AUDIO = RUTA_ASSETS + 'audio/jocs/marcianitos/';
+
+let runtimeJoc;
+let direccioBloc = 1;
+let fotograma = 0;
+let frequenciaMovimentBloc = FREQUENCIA_MOVIMENT_BLOC_INICIAL;
+let canviarDireccio = false;
+
 
 $(document).ready(function () {
   window.scrollTo(0, 0);
@@ -26,9 +41,22 @@ $(document).ready(function () {
     'fantasmes': {},
   };
 
-  let aa = new Alien(100, 100, '30', 1);
-  let bb = new Alien(200, 100, '20', 2);
-  let cc = new Alien(300, 100, '10', 3);
+  let audio = {
+    'alien_mort' : new Audio(RUTA_AUDIO+'alien_mort.wav'),
+    'bloc' : {
+      'lent' : new Audio(RUTA_AUDIO+'bloc1.wav'),
+      'mitja' : new Audio(RUTA_AUDIO+'bloc2.wav'),
+      'rapid' : new Audio(RUTA_AUDIO+'bloc3.wav'),
+      'molt_rapid' : new Audio(RUTA_AUDIO+'bloc4.wav')
+    },
+    'jugador_mort' : new Audio(RUTA_AUDIO+'jugador_mort.wav'),
+    'nau_extra' : new Audio(RUTA_AUDIO+'nau_extra.wav'),
+    'tret' : new Audio(RUTA_AUDIO+'tret.wav'),
+  };
+  audio.bloc.lent.volume = 0.25;
+  audio.bloc.mitja.volume = 0.25;
+  audio.bloc.rapid.volume = 0.25;
+  audio.bloc.molt_rapid.volume = 0.25;
 
   let sprites = {
     'aliens': {},
@@ -36,9 +64,16 @@ $(document).ready(function () {
       'x' : (c.width - MIDA_JUGADOR) / 2,
       'y' : c.height - ALTURA_JUGADOR,
       'imatge' : new Image()
+    },
+    'tret' : {
+      'x' : undefined,
+      'y' : undefined,
+      'imatge' : new Image(),
+      'enCurs' : false
     }
   };
   sprites.jugador.imatge.src = RUTA_IMATGES+'jugador.png';
+  sprites.tret.imatge.src = RUTA_IMATGES+'tret.svg';
 
   let imgAliens = [
     new Image(),
@@ -64,21 +99,13 @@ $(document).ready(function () {
       sprites.aliens[`${i}-${j}`] = new Alien(j * SEPARACIO_COLUMNA, i * SEPARACIO_FILA + MARGE_VERTICAL_GRUP, punts, tipus);
     }
   }
-  console.log(sprites)
-  dibuixarSprites()
-
-  let runtimeJoc = setInterval(dibuixar, 10000);
-
-
 
   //Controls
   $(window).on('keydown', function (key) {
     let codi = key.keyCode;
 
     if (codi == 32 || codi == 37 || codi == 39) {
-      let direccio = '';
       key.preventDefault();
-      console.log(codi);
       switch (codi) {
         case 32:
           disparar();
@@ -90,21 +117,37 @@ $(document).ready(function () {
           moureJugador('L');
           break;
       }
-
-      socket.emit('moviment', { 'direccio': direccio });
     }
   });
 
-  function dibuixar () {
+  runtimeJoc = setInterval(motor, TASA_REFRESC);
+
+  function motor() {
+    if (fotograma % frequenciaMovimentBloc == 0) {
+      moureBloc();
+    }
+    movimentTret();
+    colisions();
+    dibuixar();
+    fotograma++;
+  }
+
+  function dibuixar() {
+    ctx.clearRect(0, 0, c.width, c.height);
     dibuixarSprites();
     dibuixarPuntuacio();
   }
 
   function dibuixarSprites() {
-    console.log(sprites.aliens)
     ctx.drawImage(sprites.jugador.imatge, sprites.jugador.x, sprites.jugador.y, MIDA_JUGADOR, MIDA_JUGADOR);
+    if (sprites.tret.enCurs !== undefined && sprites.tret.enCurs) {
+      ctx.drawImage(sprites.tret.imatge, sprites.tret.x, sprites.tret.y, MIDA_TRET, MIDA_TRET);
+    }
+
     for (let [i, alien] of Object.entries(sprites.aliens)) {
-      ctx.drawImage(imgAliens[alien.tipus-1], alien.x, alien.y, MIDA_ALIENS, MIDA_ALIENS);
+      if (alien.viu) {
+        ctx.drawImage(imgAliens[alien.tipus-1], alien.x, alien.y, MIDA_ALIENS, MIDA_ALIENS);
+      }
     }
   }
 
@@ -112,6 +155,32 @@ $(document).ready(function () {
 
   }
 
+  function moureBloc(direccio) {
+    if (canviarDireccio) {
+      for (let [i, alien] of Object.entries(sprites.aliens)) {
+        alien.y += DESCENS_BLOC;
+      }
+      if (frequenciaMovimentBloc > FREQUENCIA_MOVIMENT_BLOC_INICIAL / 2.5) {
+        frequenciaMovimentBloc--;
+      }
+      direccioBloc *= -1;
+      dibuixar();
+      canviarDireccio = false;
+    }
+
+    for (let [i, alien] of Object.entries(sprites.aliens)) {
+      alien.x += MOVIMENT_BLOC * direccioBloc;
+      if (alien.x >= c.width - MIDA_ALIENS
+        || alien.x < 0 + MOVIMENT_BLOC) {
+        canviarDireccio = true;
+      }
+    }
+
+    if (frequenciaMovimentBloc > FREQUENCIA_MOVIMENT_BLOC_INICIAL - FREQUENCIA_MOVIMENT_BLOC_INICIAL / 5) { audio.bloc.lent.play() }
+    else if (frequenciaMovimentBloc > FREQUENCIA_MOVIMENT_BLOC_INICIAL / 2.5) { audio.bloc.lent.play() }
+    else if (frequenciaMovimentBloc > FREQUENCIA_MOVIMENT_BLOC_INICIAL / 2) { audio.bloc.lent.play() }
+    else if (frequenciaMovimentBloc <= FREQUENCIA_MOVIMENT_BLOC_INICIAL / 2) { audio.bloc.molt_rapid.play() }
+  }
   function moureJugador(direccio) {
     if (direccio == 'L') {
 
@@ -120,174 +189,41 @@ $(document).ready(function () {
 
     }
   }
-  /*
-  socket.on('taulellJoc', function (data) {
-    let cocos = data.cocos;
-    let fantasmes = data.fantasmes;
-    let pacmans = data.pacmans;
 
-    //Netejar canvas
-    ctx.clearRect(0, 0, c.width, c.height);
+  function disparar() {
 
-    //Si es el primer cop carregar imatges
-    if (primera) {
-      for (coco of cocos) {
-        ctx.beginPath();
-        ctx.fillStyle = "#fff";
-        ctx.arc(coco.x, coco.y, 5, 0, 2 * Math.PI);
-        ctx.fill();
-      }
+    if (sprites.tret.enCurs !== undefined && !sprites.tret.enCurs) {
+      sprites.tret.enCurs = true;
+      sprites.tret.x = sprites.jugador.x + MIDA_JUGADOR / 2 - 8 ;
+      sprites.tret.y = c.height - ALTURA_JUGADOR - 5;
 
-      //Carregar fantasmes
-      for (let i = 0; i < fantasmes.length; i++) {
-        let fantasma = fantasmes[i];
-
-        let img = new Image();
-        img.onload = function () {
-          ctx.drawImage(img, fantasma.x, fantasma.y, MIDA_PERSONATGES, MIDA_PERSONATGES);
-        };
-
-        switch (i % 4) {
-          case 0:
-            img.src = "./img/blinky.svg";
-            img.alt = "Blinky";
-            break;
-          case 1:
-            img.src = "./img/pinky.svg";
-            img.alt = "Pinky";
-            break;
-          case 2:
-            img.src = "./img/inky.svg";
-            img.alt = "Inky";
-            break;
-          case 3:
-            img.src = "./img/clyde.svg";
-            img.alt = "Clyde";
-            break;
-        }
-        imatges['fantasmes'][i] = {
-          'img': img,
-          'direccio': fantasma.direccio
-        };
-      }
-
-      //Carregar pacmans
-      for (let i = 0; i < pacmans.length; i++) {
-        let pacman = pacmans[i];
-
-        let img = new Image();
-
-        img.src = "./img/pacman/obert.svg";
-        img.alt = "Pacman";
-
-        imatges['pacmans'][i] = {
-          'img': img,
-          'direccio': pacman.direccio
-        };
-      }
-      primera = false;
+      audio.tret.play();
     }
+  }
 
-    for (coco of cocos) {
-      ctx.beginPath();
-      ctx.fillStyle = "#fff";
-      ctx.arc(coco.x, coco.y, 5, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    //Fantasmes
-    for (let i = 0; i < fantasmes.length; i++) {
-      let fantasma = fantasmes[i];
-      if (imatges['fantasmes'][i].img !== undefined) {
-        ctx.drawImage(imatges['fantasmes'][i].img, fantasma.x, fantasma.y, MIDA_PERSONATGES, MIDA_PERSONATGES);
-      }
-
-    }
-
-    //Pacmans
-    for (let i = 0; i < pacmans.length; i++) {
-      let pacman = pacmans[i];
-
-      if (imatges['pacmans'][i].img !== undefined) {
-        let img = imatges['pacmans'][i].img;
-        let direccio = pacman.direccio;
-        let x = pacman.x;
-        let y = pacman.y;
-        let punts = pacman.punts;
-        let nom = pacman.nomUsuari.charAt(0).toUpperCase() + pacman.nomUsuari.slice(1).toLowerCase();
-
-        //Teletransportar-se en els limits
-        if (x >= c.width - MIDA_PERSONATGES && x < c.width) {
-          ctx.save();
-          ctx.translate(-c.width, 0);
-          dibuixarPacman(img, x, y, direccio);
-          ctx.restore();
-        }
-        else if (y >= c.height - MIDA_PERSONATGES && y < c.height) {
-          ctx.save();
-          ctx.translate(0, -c.height);
-          dibuixarPacman(img, x, y, direccio);
-          ctx.restore();
-        }
-        dibuixarPacman(img, x, y, direccio);
-
-        //Puntuació
-        ctx.textAlign = 'right';
-        ctx.fillStyle = "#ffffff";
-        if (i == 0) {
-          ctx.font = "28px Arial";
-          ctx.fillText(`Puntuacions`, c.width - 25, 45);
-        }
-        ctx.font = "18px Arial";
-        let nomLocal = $('#nom-usuari').attr('data-nom');
-        if (nomLocal && nomLocal.toLowerCase() === nom.toLowerCase()) {
-          ctx.fillStyle = "#ffe824";
-        }
-        ctx.fillText(`${nom}: ${punts}`, c.width - 25, 50 + 20 * (i + 1));
+  function movimentTret() {
+    if (sprites.tret.enCurs !== undefined && sprites.tret.enCurs) {
+      sprites.tret.y -= VELOCITAT_TRET;
+      if (sprites.tret.y < - MIDA_TRET) {
+        sprites.tret.enCurs = false;
       }
     }
-  });
-  function dibuixarPacman(img, x, y, direccio) {
-    if (direccio != '') {
-      switch (direccio) {
-        case 'R':
-          ctx.drawImage(img, x, y, MIDA_PERSONATGES, MIDA_PERSONATGES);
-          break;
-        case 'U':
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.rotate(270 * Math.PI / 180);
-          ctx.translate(-(canvas.width / 2), -(canvas.height / 2));
-          ctx.drawImage(img, canvas.width / 2, canvas.height / 2, -MIDA_PERSONATGES, MIDA_PERSONATGES);
-          ctx.restore();
-          break;
-        case 'D':
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.rotate(90 * Math.PI / 180);
-          ctx.translate(-(canvas.width / 2), -(canvas.height / 2));
-          ctx.drawImage(img, canvas.width / 2, canvas.height / 2, MIDA_PERSONATGES, -MIDA_PERSONATGES);
-          ctx.restore();
-          break;
-        case 'L':
-          ctx.save();
-          ctx.scale(-1, 1);
-          ctx.drawImage(img, -x, y, -MIDA_PERSONATGES, MIDA_PERSONATGES);
-          ctx.restore();
-          break;
-      }
-      if ((x + y) % 16 == 0) {
-        if (img.src.includes('obert')) {
-          img.src = "./img/pacman/tancat.svg";
-        } else {
-          img.src = "./img/pacman/obert.svg";
+  }
+
+  function colisions() {
+    if (sprites.tret.enCurs !== undefined && sprites.tret.enCurs) {
+      for (let [i, alien] of Object.entries(sprites.aliens)) {
+        if (alien.viu) {
+          let colisioX = sprites.tret.x + MIDA_TRET - 2 > alien.x && sprites.tret.x < alien.x + MIDA_ALIENS - 2;
+          let colisioY = sprites.tret.y + MIDA_TRET - 2 > alien.y && sprites.tret.y < alien.y + MIDA_ALIENS - 2;
+
+          if (colisioX && colisioY) {
+            alien.viu = false;
+            sprites.tret.enCurs = false;
+          }
         }
       }
-    } else {
-      ctx.drawImage(img, x, y, MIDA_PERSONATGES, MIDA_PERSONATGES);
     }
-  }*/
+  }
+
 });
-
-
-
