@@ -1,3 +1,13 @@
+:root {
+    --color-primari: #705ee7;
+}
+/* Fonts */
+@font-face {
+    font-family: visitor1;
+    src: url('visitor1.ttf');
+}
+
+
 /* General */
 body { background-color: #111; }
 body * { color: #eaeaea; }
@@ -23,6 +33,9 @@ body * { color: #eaeaea; }
     border-top: 1px solid rgb(221, 221, 221);
 }
 
+.row {
+    margin: 0;
+}
 .table-user-information > tbody > tr:first-child {
     border-top: 0;
 }
@@ -41,11 +54,33 @@ body * { color: #eaeaea; }
 }
 footer {
     margin-top: 50px;
-    padding: 5px 0;
-    font-size: 16px;
+    padding: 10px 0;
+    font-size: 18px;
     text-align: center;
     background-color: #222;
+    font-family: visitor1;
 }
+.navbar-brand {
+    position: absolute;
+    left: 1%;
+    right: 1%;
+}
+.navbar-brand img{
+    max-width: 100%;
+    max-height: 60px;
+    margin: 0 auto;
+    display: block;
+}
+.visitor {
+    font-family: visitor1;
+    font-size: 1.4em;
+}
+nav { font-size: 1.3em; }
+nav a:hover {
+    background-color: unset !important;
+    color: var(--color-primari);
+}
+
 /* Llista jocs */
 .jocs {
     display: grid;
@@ -129,7 +164,7 @@ footer {
     font-size: 16px;
 }
 .puntuacions ul > li:hover, .puntuacions ul > li.active{
-    color: #705ee7;
+    color: var(--color-primari);
 }
 #classificacio-puntuacions {
     text-align: center;
@@ -142,6 +177,9 @@ footer {
 }
 #classificacio-puntuacions table th {
     text-align: center;
+}
+#classificacio-puntuacions hr {
+    margin-top: 10px;
 }
 #classificacio-puntuacions .fa-spin {
     font-size: 30px;
@@ -157,13 +195,39 @@ footer {
 }
 
 /* Canvas */
+.joc-wrapper {
+    width: 100%;
+    position: relative;
+}
 .canvas-wrapper {
     display: flex;
     justify-content: center;
 }
 .joc-canvas {
     padding: 0 25px;
-    background: #333;
+    background: #000;
     box-shadow: 0 0 8px aliceblue;
     border-radius: 8px;
 }
+.missatge-canvas {
+    position: absolute;
+    text-align: center;
+    right: 1%;
+    left: 1%;
+    top: 200px;
+}
+.missatge-canvas h1 {
+    position: relative;
+    margin: 0;
+    font-size: 72px;
+}
+.jugar-partida {
+    margin-top: 50px;
+    cursor: pointer;
+    font-size: 28px;
+    bottom: 0;
+}
+.jugar-partida:hover {
+    color: #705ee7;
+}
+.main-joc { margin-bottom: 80px; }

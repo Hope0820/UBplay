@@ -13,13 +13,13 @@ $(document).ready(function() {
       if (this.readyState == 4 && this.status == 200) {
         if (this.responseText != "null") {
           let usuaris = JSON.parse(this.responseText);
-          html = "<table><tr><th><i class=\"fa-solid fa-hashtag\"></i></th><th><i class=\"fa-solid fa-user\"></i></th><th><i class=\"fa-solid fa-coins\"></i></th></tr>";
+          html = "<table><tbody><tr><th><i class=\"fa-solid fa-hashtag\"></i></th><th><i class=\"fa-solid fa-user\"></i></th><th><i class=\"fa-solid fa-coins\"></i></th></tr><hr/>";
 
           usuaris.forEach(function (u, i) {
-          html += "<tr><td>"+(i+1)+"</td><td>"+u['username']+"</td><td>"+u[`p_${periode}`]+"</td></tr>";
+            html += "<tr><td>"+(i+1)+"</td><td>"+u['username']+"</td><td>"+u[`p_${periode}`]+"</td></tr>";
           });
 
-          html += "</table>";
+          html += "</tbody></table>";
         } else {
           html = `<p class='buit'>Sense resultats</p>`;
         }

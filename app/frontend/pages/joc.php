@@ -5,12 +5,28 @@
   $database = Database::getInstance();
   $database->get('jocs',array('ruta','=',$ruta));
   $joc_bd = $database->results()[0];
+
+  $user = new User();
+  $uid = "anon";
+  $record = 0;
+  if ($user->find($_SESSION['user'])) {
+    $uid = $_SESSION['user'];
+    $database = Database::getInstance();
+    $database->query("SELECT MAX(puntuacio) AS record FROM resultats WHERE uid = ".$_SESSION['user']);
+    $record = $database->results()[0]->record;
+  }
 ?>
-<h1 class="titol-pagina">UBplay, la teva plataforma web de jocs</h1>
-<div class="row">
+<h1 class="titol-pagina"><?php appSlogan()?></h1>
+<div class="row main-joc">
   <div class="col-md-9">
-    <div class="canvas-wrapper">
-      <canvas id="joc-<?php echo $joc_bd->jid ?>" class="joc-canvas" width="800" height="600"></canvas>
+    <div class="joc-wrapper">
+      <div class="canvas-wrapper">
+        <canvas id="joc-<?php echo $joc_bd->jid ?>" data-usuari="<?php echo $uid ?>" class="joc-canvas" record="<?php echo $record ?>" width="800" height="600"></canvas>
+      </div>
+      <div class="missatge-canvas">
+        <h1><?php echo $joc_bd->nom ?></h1>
+        <div class="jugar-partida">Començar partida</div>
+      </div>
     </div>
   </div>
   <div class="col-md-3">

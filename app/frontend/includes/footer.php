@@ -1,7 +1,6 @@
 
 <footer>
-  <p>&copy; Unai Baeza</p>
+  <span>2022 - &copy; Unai Baeza Jorquera</span>
 </footer>
-
 </body>
 </html>

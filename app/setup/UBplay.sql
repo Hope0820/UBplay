@@ -105,13 +105,13 @@ INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('Proximamen
 CREATE TABLE `resultats` (
                         `rid` int(11) NOT NULL,
                         `uid` int(11) NOT NULL,
-                        `nom` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
                         `jid` int(11) NOT NULL,
                         `puntuacio` int(10) NOT NULL,
                         data TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
                         PRIMARY KEY (`rid`),
-                        FOREIGN KEY (`uid`) REFERENCES `users`(`uid`) ON DELETE CASCADE
+                        FOREIGN KEY (`uid`) REFERENCES `users`(`uid`) ON DELETE CASCADE,
+                        FOREIGN KEY (`jid`) REFERENCES `jocs`(`jid`) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ALTER TABLE `resultats`
@@ -152,5 +152,35 @@ ON SCHEDULE
     STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 1 YEAR)
 DO
 UPDATE users SET p_any = 0;
+
+-- Event incrementar puntuacions dinamicament
+DELIMITER $$
+
+CREATE OR REPLACE TRIGGER `puntuacio_dinamica`
+AFTER INSERT ON resultats
+FOR EACH ROW
+BEGIN
+
+UPDATE users
+SET p_dia = p_dia + new.puntuacio
+WHERE users.uid = new.uid;
+
+UPDATE users
+SET p_setmana = p_setmana + new.puntuacio
+WHERE users.uid = new.uid;
+
+UPDATE users
+SET p_mes = p_mes + new.puntuacio
+WHERE users.uid = new.uid;
+
+UPDATE users
+SET p_any = p_any + new.puntuacio
+WHERE users.uid = new.uid;
+
+UPDATE users
+SET p_total = p_total + new.puntuacio
+WHERE users.uid = new.uid;
+
+END$$
 
 COMMIT;

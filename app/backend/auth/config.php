@@ -4,6 +4,7 @@ $GLOBALS['config'] = array(
 
     'app' => array(
         'name'          => 'UBplay',
+        'slogan'        => 'Jocs arcade del segle <span class="visitor">XX</span>'
     ),
 
     'mysql' => array(

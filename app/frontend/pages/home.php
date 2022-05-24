@@ -1,5 +1,5 @@
 <?php $database = Database::getInstance(); ?>
-<h1 class="titol-pagina">UBplay, la teva plataforma web de jocs</h1>
+<h1 class="titol-pagina"><?php appSlogan()?></h1>
 <div class="row">
   <div class="col-md-9">
     <div class="jocs">

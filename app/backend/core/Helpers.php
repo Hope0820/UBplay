@@ -27,5 +27,8 @@ function appName()
 {
     echo Config::get('app/name');
 }
+function appSlogan() {
+  echo Config::get('app/slogan');
+}
 
 
