@@ -24,7 +24,7 @@ if (Input::exists())
 
                 if ($login)
                 {
-                    Redirect::to('index.php');
+                    Redirect::to('/index.php');
                 }
                 else
                 {

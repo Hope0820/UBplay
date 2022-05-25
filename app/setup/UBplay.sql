@@ -7,6 +7,10 @@
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.10
 
+-- CREATE DATABASE IF NOT EXISTS ubplay DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci;
+-- USE ubplay;
+-- USE id18817314_ubplay;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -63,9 +67,16 @@ CREATE TABLE `users` (
 ALTER TABLE `users`
     MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000;
 
-INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`, `p_dia`, `p_setmana`, `p_mes`, `p_any`, `p_total`) VALUES ('ubaeza', '$2y$10$sX/k19vToScBCQy1LUvw2e2.5iCOsbL3zb7CVni/M52Q2leXgONvO', 'Unai', '2022-04-19 17:02:07', 1, 1500, 2200, 2200, 2500, 2500);
-INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`, `p_dia`, `p_setmana`, `p_mes`, `p_any`, `p_total`) VALUES ('maria99', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Maria', '2022-04-23 22:33:22', 1, 600, 600, 1350, 3550, 3550);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('ubaeza', '$2y$10$sX/k19vToScBCQy1LUvw2e2.5iCOsbL3zb7CVni/M52Q2leXgONvO', 'Unai', '2022-04-19 17:02:07', 1);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('maria99', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Maria', '2022-04-23 22:33:22', 1);
 INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('ttomas', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Tomàs', '2022-04-24 09:42:27', 1);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('ppuig', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Tomàs', '2022-04-24 09:42:27', 1);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('ruiz94', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Tomàs', '2022-04-24 09:42:27', 1);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('ferf06', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Tomàs', '2022-04-24 09:42:27', 1);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('robocop', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Tomàs', '2022-04-24 09:42:27', 1);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('eloi23', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Tomàs', '2022-04-24 09:42:27', 1);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('jordil', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Tomàs', '2022-04-24 09:42:27', 1);
+INSERT INTO users (`username`, `password`, `name`, `joined`, `groups`) VALUES ('cgomez', '$2y$10$xoWUUcT92LR54EZCPzUm8O1EJDyM.Q9tymTxpVoQdT1QK0JINBHBS', 'Tomàs', '2022-04-24 09:42:27', 1);
 
 -- Sessions usuaris
 CREATE TABLE `users_session` (
@@ -85,7 +96,7 @@ CREATE TABLE `jocs` (
   `nom` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ruta` varchar(100) COLLATE utf8mb4_unicode_ci,
   `descripcio` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `img` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  actiu boolean NOT NULL DEFAULT 0,
   `cops_jugat` int(11) NOT NULL,
   `data_afegit` datetime NOT NULL,
 
@@ -95,11 +106,11 @@ CREATE TABLE `jocs` (
 ALTER TABLE `jocs`
     MODIFY `jid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
-INSERT INTO jocs (`nom`, `ruta`, `img`, `descripcio`, `data_afegit`) VALUES ('Space Invaders', 'marcianitos.php', 'marcianitos.jpg', 'Elimina a totes les naus alienígenes!', '2022-04-19 17:02:07');
-INSERT INTO jocs (`nom`, `ruta`, `img`, `descripcio`, `data_afegit`) VALUES ('B', 'snake.php', 'b.png', 'Segon joc', '2022-04-27 12:05:30');
-INSERT INTO jocs (`nom`, `ruta`, `img`, `descripcio`, `data_afegit`) VALUES ('C', 'c.php', 'c.png', 'Tercer joc', '2022-05-03 10:09:18');
-INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('Proximament', 'proximament.png', 'Proximament', '2022-05-03 20:37:02');
-INSERT INTO jocs (`nom`, `img`, `descripcio`, `data_afegit`) VALUES ('Proximament', 'proximament.png', 'Proximament','2022-05-20 22:13:14');
+INSERT INTO jocs (`nom`, `ruta`, `descripcio`, `data_afegit`, `actiu`) VALUES ('Space Invaders', 'marcianitos.php', 'Elimina a totes les naus alienígenes!', '2022-04-19 17:02:07', 1);
+INSERT INTO jocs (`nom`, `ruta`, `descripcio`, `data_afegit`) VALUES ('Horace & The Spiders', 'horace-spiders.php', 'Avança per les plataformes!', '2022-04-27 12:05:30');
+INSERT INTO jocs (`nom`, `ruta`, `descripcio`, `data_afegit`) VALUES ('Pacman', 'pacman.php', 'Consegueix el màxim de punts sense que t''atrapin els fantasmes!', '2022-05-03 10:09:18');
+INSERT INTO jocs (`nom`, `ruta`, `descripcio`, `data_afegit`) VALUES ('Breakout', 'breakout.php', 'Trenca tots els maons!', '2022-05-03 20:37:02');
+INSERT INTO jocs (`nom`, `ruta`, `descripcio`, `data_afegit`) VALUES ('Snake', 'snake.php', 'Consegueix tots els punts sense xocar!', '2022-05-20 22:13:14');
 
 -- Resultats
 CREATE TABLE `resultats` (
@@ -117,12 +128,65 @@ CREATE TABLE `resultats` (
 ALTER TABLE `resultats`
     MODIFY `rid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
+-- Trigger incrementar puntuacions dinamicament
+DELIMITER $$
+
+CREATE OR REPLACE TRIGGER `puntuacio_dinamica`
+AFTER INSERT ON resultats
+FOR EACH ROW
+BEGIN
+
+UPDATE users
+SET p_dia = p_dia + new.puntuacio
+WHERE users.uid = new.uid;
+
+UPDATE users
+SET p_setmana = p_setmana + new.puntuacio
+WHERE users.uid = new.uid;
+
+UPDATE users
+SET p_mes = p_mes + new.puntuacio
+WHERE users.uid = new.uid;
+
+UPDATE users
+SET p_any = p_any + new.puntuacio
+WHERE users.uid = new.uid;
+
+UPDATE users
+SET p_total = p_total + new.puntuacio
+WHERE users.uid = new.uid;
+
+UPDATE jocs
+SET cops_jugat = cops_jugat + 1
+WHERE jocs.jid = new.jid;
+
+END$$
+
+DELIMITER ;
+
 INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1000,1500);
 INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (2,1000,700);
-INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (3,1000,300);
-INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (3,1001,600);
-INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (3,1001,750);
-INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (3,1001,2200);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1001,300);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (2,1001,645);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1002,275);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (2,1002,2350);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1003,300);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (2,1003,630);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1004,625);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (2,1004,750);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1005,2200);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1005,320);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (2,1006,675);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1006,250);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (2,1007,2200);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1007,600);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (2,1008,680);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1008,950);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (2,1004,750);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1001,1200);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1008,980);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1009,3500);
+INSERT INTO resultats (`jid`, `uid`, `puntuacio`) VALUES (1,1009,1200);
 
 -- Events puntuacions
 CREATE OR REPLACE EVENT `reset_puntuacio_dia`
@@ -152,35 +216,5 @@ ON SCHEDULE
     STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 1 YEAR)
 DO
 UPDATE users SET p_any = 0;
-
--- Event incrementar puntuacions dinamicament
-DELIMITER $$
-
-CREATE OR REPLACE TRIGGER `puntuacio_dinamica`
-AFTER INSERT ON resultats
-FOR EACH ROW
-BEGIN
-
-UPDATE users
-SET p_dia = p_dia + new.puntuacio
-WHERE users.uid = new.uid;
-
-UPDATE users
-SET p_setmana = p_setmana + new.puntuacio
-WHERE users.uid = new.uid;
-
-UPDATE users
-SET p_mes = p_mes + new.puntuacio
-WHERE users.uid = new.uid;
-
-UPDATE users
-SET p_any = p_any + new.puntuacio
-WHERE users.uid = new.uid;
-
-UPDATE users
-SET p_total = p_total + new.puntuacio
-WHERE users.uid = new.uid;
-
-END$$
 
 COMMIT;

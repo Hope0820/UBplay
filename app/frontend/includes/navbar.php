@@ -6,10 +6,7 @@
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="#">Jocs</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Puntuacions</a>
+        <a class="nav-link" href="/index.php">Jocs</a>
       </li>
     </ul>
     <a class="navbar-brand" href="/index.php"><img alt="UBplay" src="<?php echo FRONTEND_ASSET . 'img/logo.png'; ?>"></a>
@@ -20,7 +17,7 @@
     </ul>
     <?php else: ?>
     <ul class="nav navbar-nav nav-item navbar-right">
-      <li><a href="/register.php"><i class="fa-regular fa-user"></i> Registrar-se</a></li>
+      <li><a href="/registrar.php"><i class="fa-regular fa-user"></i> Registrar-se</a></li>
       <li><a href="/login.php"><i class="fa-solid fa-arrow-right-from-bracket"></i>  Iniciar-sessió</a></li>
     </ul>
   <?php endif; ?>

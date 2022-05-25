@@ -87,7 +87,7 @@ class Validation
 
                             if ($check->count())
                             {
-                                $this->addError("{$item} already exists.");
+                                $this->addError("{$item} ja existeix.");
                             }
                             break;
 

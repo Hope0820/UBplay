@@ -17,7 +17,7 @@ class Redirect
                     break;
                 }
             }
-
+            //echo "<script>window.location.assign($location)</script>";
             header('Location: '.$location);
             exit();
         }

@@ -6,8 +6,9 @@
     <?php
       $database->get('jocs', array(''));
       foreach($database->results() as $joc) {
+        $nom_clau = explode('.php', $joc->ruta)[0];
         echo "<a href='".FRONTEND_JOCS.$joc->ruta."'><div class='joc'>
-                <div class='img-wrapper'><img src='".FRONTEND_ASSET_IMG.$joc->img."' alt='$joc->nom'></div>
+                <div class='img-wrapper'><img src='".FRONTEND_ASSET_IMG."jocs/".$nom_clau."/mini.jpg' alt='$joc->nom'></div>
                 <span class='joc-descripcio'>$joc->descripcio</span>
                 <span class='joc-nom'>$joc->nom</span>
               </div></a>";

@@ -1,5 +1,5 @@
 <div class="container" style="padding-top: 5%; padding-bottom: 5%;">
-<h2>Register Form</h2>
+<h2>Enregistrar Usuari</h2>
   <form action="" method="post">
 
     <div class="form-group">
@@ -19,6 +19,6 @@
       <input type="password" class="form-control" id="password_again" name="password_again">
     </div>
     <input type="hidden" name="csrf_token" value="<?php echo Token::generate(); ?>">
-    <input type="submit" value="Register me">
+    <input type="submit" class="boto" value="Enregistrar Usuari">
   </form>
 </div>

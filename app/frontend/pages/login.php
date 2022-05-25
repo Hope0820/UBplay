@@ -16,6 +16,6 @@
     </label>
     </div>
      <input type="hidden" name="csrf_token" value="<?php echo Token::generate(); ?>">
-     <input type="submit" value="Log In">
+     <input type="submit" class="boto" value="Iniciar Sessió">
   </form>
 </div>

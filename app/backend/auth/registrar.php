@@ -43,9 +43,8 @@ if(Input::exists())
                     'joined'    => date('Y-m-d H:i:s'),
                     'groups'    => 1
                     ));
-
-                Session::flash('register-success', 'Gracies per registrar-te, ja pots iniciar sessió');
-                Redirect::to('login.php');
+                //Session::flash('register-success', 'Gracies per registrar-te, ja pots iniciar sessió');
+                Redirect::to('/login.php');
             }
             catch(Exception $e)
             {

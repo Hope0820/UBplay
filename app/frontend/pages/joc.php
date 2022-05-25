@@ -9,7 +9,7 @@
   $user = new User();
   $uid = "anon";
   $record = 0;
-  if ($user->find($_SESSION['user'])) {
+  if (isset($_SESSION['user']) && $user->find($_SESSION['user'])) {
     $uid = $_SESSION['user'];
     $database = Database::getInstance();
     $database->query("SELECT MAX(puntuacio) AS record FROM resultats WHERE uid = ".$_SESSION['user']);

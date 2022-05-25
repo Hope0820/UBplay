@@ -113,7 +113,6 @@ $(document).ready(function () {
     'tretJugador' : {
       'x' : undefined,
       'y' : undefined,
-      'imatge' : new Image(),
       'enCurs' : false
     },
     'tretsAlien' : [
@@ -141,7 +140,6 @@ $(document).ready(function () {
     ]
   };
   sprites.jugador.imatge.src = RUTA_IMATGES+'jugador.png';
-  sprites.tretJugador.imatge.src = RUTA_IMATGES+'tret_jugador.svg';
   sprites.nauExtra.imatge.src = RUTA_IMATGES+'nau_extra.svg';
   inicialitzarJugador();
 
@@ -203,7 +201,6 @@ $(document).ready(function () {
 
   function motor() {
     fotograma++;
-    //TODO ARREGLAR BAIXADES EXAGERADES
     if (tickBloc == frequenciaMovimentBloc) { moureBloc(); }
     else { tickBloc++; }
     if (direccioJugador != 0) { moureJugador(); }
@@ -224,7 +221,8 @@ $(document).ready(function () {
     ctx.drawImage(sprites.jugador.imatge, sprites.jugador.x, sprites.jugador.y, MIDA_JUGADOR, MIDA_JUGADOR);
 
     if (sprites.tretJugador.enCurs !== undefined && sprites.tretJugador.enCurs) {
-      ctx.drawImage(sprites.tretJugador.imatge, sprites.tretJugador.x, sprites.tretJugador.y, MIDA_TRET_JUGADOR, MIDA_TRET_JUGADOR);
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(sprites.tretJugador.x, sprites.tretJugador.y, MIDA_TRET_JUGADOR, MIDA_TRET_JUGADOR / 5.5);
     }
 
     let unViu = false
@@ -250,7 +248,7 @@ $(document).ready(function () {
       }
     }
     if (sprites.nauExtra.enCurs) {
-      ctx.drawImage(sprites.nauExtra.imatge, sprites.nauExtra.x, ALTURA_NAU_EXTRA, MIDA_NAU_EXTRA, MIDA_NAU_EXTRA);
+      ctx.drawImage(sprites.nauExtra.imatge, sprites.nauExtra.x, ALTURA_NAU_EXTRA, MIDA_NAU_EXTRA, MIDA_NAU_EXTRA / 2.3);
     }
     else if (!sprites.nauExtra.enCurs && sprites.nauExtra.duracioMort > 0) {
       ctx.fillStyle = "#f00";
@@ -350,7 +348,7 @@ $(document).ready(function () {
       sprites.tretJugador.x = sprites.jugador.x + MIDA_JUGADOR / 2 - 8 ;
       sprites.tretJugador.y = c.height - ALTURA_JUGADOR - 5;
 
-      audio[`tret${alternadorAudioTret}`].play();
+      reproduirAudio(audio[`tret${alternadorAudioTret}`]);
       if (alternadorAudioTret == 0) { alternadorAudioTret = 1; }
       else if (alternadorAudioTret == 1) { alternadorAudioTret = 0; }
     }
@@ -396,7 +394,7 @@ $(document).ready(function () {
       for (let i=0; i<MOVIMENT_NAU_EXTRA; i++) {
         nauExtra.x += i * nauExtra.direccio;
         //ctx.clearRect(0, ALTURA_NAU_EXTRA, c.width, MIDA_NAU_EXTRA);
-        ctx.drawImage(nauExtra.imatge, nauExtra.x, ALTURA_NAU_EXTRA, MIDA_NAU_EXTRA, MIDA_NAU_EXTRA);
+        ctx.drawImage(nauExtra.imatge, nauExtra.x, ALTURA_NAU_EXTRA, MIDA_NAU_EXTRA, MIDA_NAU_EXTRA / 2.3);
 
         if (nauExtra.x > c.width + MIDA_NAU_EXTRA || nauExtra.x < -MIDA_NAU_EXTRA) {
           nauExtra.enCurs = false;
@@ -487,7 +485,7 @@ $(document).ready(function () {
         if (colisioX && colisioY) {
           tretAlien.enCurs = false;
           videsJugador--;
-          audio[`jugadorMort${alternadorAudioMortJugador}`].play().catch(function(){});
+          reproduirAudio(audio[`jugadorMort${alternadorAudioMortJugador}`]);
           if (alternadorAudioMortJugador == 0) { alternadorAudioMortJugador = 1; }
           else if (alternadorAudioMortJugador == 1) { alternadorAudioMortJugador = 0; }
           if (videsJugador <= 0) {
@@ -500,6 +498,7 @@ $(document).ready(function () {
 
   function reproduirAudio(arxiu) {
     if (!document.hidden) {
+      arxiu.volume = 0.25;
       arxiu.play().catch(function(){});
     }
   }
